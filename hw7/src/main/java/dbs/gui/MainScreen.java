@@ -8,9 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainScreen extends JFrame {
-    private JTable table1;
     private JPanel panel1;
-    private JTable table2;
+    private JTabbedPane tabbedPane1;
 
     private final CharacterProvider characterProvider;
     private final FightProvider fightProvider;

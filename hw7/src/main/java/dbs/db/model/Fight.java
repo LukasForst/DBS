@@ -7,16 +7,21 @@ import java.util.List;
 
 @Entity
 public class Fight {
+    @Id
+    @SequenceGenerator(name = "fight_id_seq",
+            sequenceName = "fight_id_seq",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "fight_id_seq")
+    private long id;
 
+    @Column
     private String place;
 
     @Column(name = "date_time")
     private java.sql.Timestamp dateTime;
 
-    @Id
-    private long id;
-
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "character_in_fight",
             joinColumns = @JoinColumn(name = "fight_id", referencedColumnName = "id"),

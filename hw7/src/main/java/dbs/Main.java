@@ -3,10 +3,8 @@ package dbs;
 import dbs.db.model.Character;
 import dbs.db.model.Fight;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class Main {
@@ -36,9 +34,25 @@ public class Main {
                 Character.class
         );
 
+        EntityTransaction et = em.getTransaction();
         List<Character> characters = charactersTq.getResultList();
         for (Character g : characters) {
             System.out.println("ID: " + g.getId() + ", Name: " + g.getName() + ", Fights.No.: " + g.getFights().size());
+            if(g.getFights().size() == 0){
+                et.begin();
+                g.addFight(fightList.get(fightList.size() - 1));
+                et.commit();
+            }
         }
+
+        et.begin();
+        Fight toAdd = new Fight();
+        toAdd.setDateTime(new Timestamp(2018,1,1, 10, 10, 10, 10));
+        toAdd.setPlace("Another");
+        em.persist(toAdd);
+        et.commit();
+
+        em.close();
+        emf.close();
     }
 }

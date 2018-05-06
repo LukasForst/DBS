@@ -9,30 +9,30 @@ import java.util.List;
 public class Character {
 
     @Id
+    @SequenceGenerator(name = "character_id_seq",
+            sequenceName = "character_id_seq",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "character_id_seq")
     private long id;
-
-
-    private String name;
 
     @Column(name = "user_id")
     private long userId;
 
-    @ManyToMany
+    @Column
+    private String name;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
-            name="character_in_fight",
-            joinColumns=@JoinColumn(name="character_id", referencedColumnName="id"),
-            inverseJoinColumns=@JoinColumn(name="fight_id", referencedColumnName="id")
+            name = "character_in_fight",
+            joinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "fight_id", referencedColumnName = "id")
     )
     private List<Fight> fights;
 
     public long getId() {
         return id;
     }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
 
     public String getName() {
         return name;
@@ -42,7 +42,6 @@ public class Character {
         this.name = name;
     }
 
-
     public long getUserId() {
         return userId;
     }
@@ -51,7 +50,15 @@ public class Character {
         this.userId = userId;
     }
 
-    public Collection<Fight> getFights(){
+    public Collection<Fight> getFights() {
         return new ArrayList<Fight>(fights);
+    }
+
+    public void addFight(Fight fightToAdd) {
+        if (fights == null) {
+            fights = new ArrayList<Fight>();
+        }
+
+        fights.add(fightToAdd);
     }
 }

@@ -1,9 +1,6 @@
 package dbs.db.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "\"User\"")
@@ -12,7 +9,11 @@ public class User {
     private String username;
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "\"User_id_seq\"",
+            sequenceName = "\"User_id_seq\"",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "\"User_id_seq\"")
     private long id;
 
 
@@ -30,11 +31,6 @@ public class User {
     public long getId() {
         return id;
     }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
 
     public String getPassword() {
         return password;

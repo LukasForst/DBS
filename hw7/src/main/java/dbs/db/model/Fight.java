@@ -33,7 +33,7 @@ public class Fight {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(final String place) {
         this.place = place;
     }
 
@@ -49,7 +49,7 @@ public class Fight {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -57,5 +57,18 @@ public class Fight {
     public Collection<Character> getCharactersInFight() {
         return new ArrayList<Character>(charactersInFight);
     }
+
+    public void addCharacterToFight(final Character character) {
+        if (charactersInFight == null) {
+            charactersInFight = new ArrayList<Character>();
+        }
+
+        charactersInFight.add(character);
+    }
+
+    public boolean removeCharacterFromFight(final long characterId){
+        return charactersInFight.removeIf(x -> x.getId() == characterId);
+    }
+
 
 }

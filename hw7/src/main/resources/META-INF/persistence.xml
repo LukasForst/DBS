@@ -15,16 +15,16 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
         <properties>
             <property
                     name="javax.persistence.jdbc.url"
-                    value="jdbc:postgresql://slon.felk.cvut.cz:5432/db18_forstluk"/>
+                    value="jdbc:postgresql://slon.felk.cvut.cz:5432/database"/>
             <property
                     name="javax.persistence.jdbc.user"
-                    value="db18_forstluk"/>
+                    value="username"/>
             <property
                     name="javax.persistence.jdbc.driver"
                     value="org.postgresql.Driver"/>
             <property
                     name="javax.persistence.jdbc.password"
-                    value="Tb662d"/>
+                    value="password"/>
         </properties>
     </persistence-unit>
 </persistence>

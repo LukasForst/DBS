@@ -1,8 +1,9 @@
 package dbs.db.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Character {
@@ -16,6 +17,13 @@ public class Character {
     @Column(name = "user_id")
     private long userId;
 
+    @ManyToMany
+    @JoinTable(
+            name="character_in_fight",
+            joinColumns=@JoinColumn(name="character_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="fight_id", referencedColumnName="id")
+    )
+    private List<Fight> fights;
 
     public long getId() {
         return id;
@@ -41,5 +49,9 @@ public class Character {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public Collection<Fight> getFights(){
+        return new ArrayList<Fight>(fights);
     }
 }

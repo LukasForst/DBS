@@ -2,7 +2,6 @@ package dbs;
 
 import dbs.db.model.Character;
 import dbs.db.model.Fight;
-import dbs.db.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,6 +19,7 @@ public class Main {
                 (b1 == null) ? "NULL" : "Id: " + b1.getId() + " | username: " + b1.getName()
         );
 
+        System.out.println("\n\nFights:");
         TypedQuery<Fight> tq = em.createQuery(
                 "SELECT f FROM Fight AS f",
                 Fight.class
@@ -27,18 +27,18 @@ public class Main {
 
         List<Fight> fightList = tq.getResultList();
         for (Fight g : fightList) {
-            System.out.println(g.getId() + " - " + g.getPlace());
+            System.out.println("ID: " + g.getId() + ", Place: " + g.getPlace() + ", Char.No: " + g.getCharactersInFight().size());
         }
 
-        TypedQuery<User> tq1 = em.createQuery(
-                "SELECT f FROM User AS f",
-                User.class
+        System.out.println("\n\nCharacters:");
+        TypedQuery<Character> charactersTq = em.createQuery(
+                "SELECT f FROM Character AS f",
+                Character.class
         );
 
-        List<User> userList = tq1.getResultList();
-        for (User g : userList) {
-            System.out.println(g.getId() + " - " + g.getUsername());
+        List<Character> characters = charactersTq.getResultList();
+        for (Character g : characters) {
+            System.out.println("ID: " + g.getId() + ", Name: " + g.getName() + ", Fights.No.: " + g.getFights().size());
         }
-
     }
 }

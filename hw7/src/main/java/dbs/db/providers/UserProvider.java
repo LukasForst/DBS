@@ -1,4 +1,4 @@
-package dbs.db;
+package dbs.db.providers;
 
 import dbs.db.model.User;
 

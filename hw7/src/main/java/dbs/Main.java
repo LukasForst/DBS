@@ -1,45 +1,41 @@
 package dbs;
 
-import dbs.db.CharacterProvider;
-import dbs.db.FightProvider;
-import dbs.db.UserProvider;
-import dbs.db.model.Character;
-import dbs.db.model.Fight;
-import dbs.db.model.User;
+import dbs.db.providers.CharacterProvider;
+import dbs.db.providers.FightProvider;
+import dbs.db.providers.UserProvider;
+import dbs.gui.MainScreen;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Collection;
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("DBSApp");
-        EntityManager em = emf.createEntityManager();
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("DBSApp");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        UserProvider p = new UserProvider(em);
-        Collection<User> users = p.getAll();
-        System.out.println("Users:");
-        for (User user : users) {
-            System.out.println("ID: " + user.getId() + ", Name: " + user.getUsername());
-        }
+        initGui(entityManagerFactory, entityManager);
+    }
 
-        CharacterProvider c = new CharacterProvider(em);
-        Collection<Character> characters = c.getAll();
-        System.out.println("\n\nCharacters:");
-        for (Character character : characters) {
-            System.out.println("ID: " + character.getId() + ", Name: " + character.getName());
-        }
+    private static void initGui(final EntityManagerFactory entityManagerFactory, final EntityManager entityManager) {
+        UserProvider userProvider = new UserProvider(entityManager);
+        CharacterProvider characterProvider = new CharacterProvider(entityManager);
+        FightProvider fightProvider = new FightProvider(entityManager);
 
-        FightProvider f = new FightProvider(em);
-        Collection<Fight> fights = f.getAll();
-        System.out.println("\n\nFights:");
-        for (Fight fight : fights) {
-            System.out.println("ID: " + fight.getId() + ", Place: " + fight.getPlace() + ", Size: " + fight.getCharactersInFight().size());
-        }
+        MainScreen mainScreen = new MainScreen(characterProvider, fightProvider, userProvider);
+        mainScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                entityManager.close();
+                entityManagerFactory.close();
+                super.windowClosing(e);
+            }
+        });
 
-        em.close();
-        emf.close();
+        mainScreen.setVisible(true);
     }
 }

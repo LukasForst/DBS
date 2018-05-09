@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +40,15 @@ public class UserProvider extends AbstractProvider {
 
     public User get(long userId) {
         return entityManager.find(User.class, userId);
+    }
+
+    public User get(String username){
+        TypedQuery<User> charactersTq = entityManager.createQuery(
+                "SELECT u FROM User AS u WHERE u.username = \"" + username + "\"",
+                User.class
+        );
+        List<User> users = charactersTq.getResultList();
+        return users.size() == 0 ? null : users.get(0);
     }
 
     public boolean delete(long userId) {

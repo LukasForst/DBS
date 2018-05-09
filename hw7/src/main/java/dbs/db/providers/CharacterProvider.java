@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +28,16 @@ public class CharacterProvider extends AbstractProvider {
 
     public Character get(long characterId) {
         return entityManager.find(Character.class, characterId);
+    }
+
+    public Character get(String name) {
+        TypedQuery<Character> charactersTq = entityManager.createQuery(
+                "SELECT c FROM Character AS c WHERE c.name = \"" + name + "\"",
+                Character.class
+        );
+
+        List<Character> characters = charactersTq.getResultList();
+        return characters.size() == 0 ? null : characters.get(0);
     }
 
     public boolean delete(long characterId) {

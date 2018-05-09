@@ -1,5 +1,6 @@
 package dbs;
 
+import dbs.db.CommandParser;
 import dbs.db.providers.CharacterProvider;
 import dbs.db.providers.FightProvider;
 import dbs.db.providers.UserProvider;
@@ -24,8 +25,9 @@ public class Main {
         UserProvider userProvider = new UserProvider(entityManager);
         CharacterProvider characterProvider = new CharacterProvider(entityManager);
         FightProvider fightProvider = new FightProvider(entityManager);
+        CommandParser commandParser = new CommandParser(characterProvider, fightProvider, userProvider);
 
-        MainScreen mainScreen = new MainScreen(characterProvider, fightProvider, userProvider);
+        MainScreen mainScreen = new MainScreen(characterProvider, fightProvider, userProvider, commandParser);
         mainScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainScreen.addWindowListener(new WindowAdapter() {
             @Override

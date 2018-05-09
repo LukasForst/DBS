@@ -67,7 +67,7 @@ public class CharacterProvider extends AbstractProvider {
 
         EntityTransaction et = entityManager.getTransaction();
         et.begin();
-        entityManager.persist(user);
+        entityManager.persist(character);
         et.commit();
         return character;
     }

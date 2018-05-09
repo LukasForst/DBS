@@ -11,6 +11,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class provides possibility to interpret given commands from GUI.
+ * <p>
+ * This is just pure java, no db handling there. For interpreting commands that uses database are there providers which handle database queries.
+ */
 @SuppressWarnings("IfCanBeSwitch")
 public class CommandParser {
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -25,22 +30,30 @@ public class CommandParser {
         this.userProvider = userProvider;
     }
 
+    /**
+     * Evaluates given commands and returns pair of boolean and message.
+     * <p>
+     * Boolean says whether was evaluating ok.
+     */
     public Pair<Boolean, String> evaluateCommands(String commands) {
         return evalSafe(commands);
     }
 
+    //wrapper function
     private Pair<Boolean, String> fail(String reason) {
         return new Pair<>(false, reason);
     }
 
+    //wrapper function
     private Pair<Boolean, String> success() {
         return new Pair<>(true, "Success.");
     }
 
     private Pair<Boolean, String> evalSafe(String commands) {
+        //try to perform query
         try {
             String[] data = commands.split(" ");
-            if(data.length < 2) return fail("Wrong arguments!");
+            if (data.length < 2) return fail("Wrong arguments!");
             String command = data[0].toLowerCase().trim();
             String entity = data[1].toLowerCase().trim();
 
@@ -54,7 +67,7 @@ public class CommandParser {
                 default:
                     return fail("Unrecognized command!");
             }
-        } catch (Exception e) {
+        } catch (Exception e) { //catch exception from providers
             logger.log(Level.WARNING, "Query failed.");
             logger.log(Level.WARNING, e.getMessage());
             return new Pair<>(false, e.getMessage());
@@ -365,7 +378,7 @@ public class CommandParser {
             return fail("User with this username or id does not exists!");
         }
 
-        userProvider.delete(user.getId());
+        userProvider.remove(user.getId());
         return success();
     }
 
@@ -391,7 +404,7 @@ public class CommandParser {
             return fail("Character with this name or id does not exists!");
         }
 
-        characterProvider.delete(user.getId());
+        characterProvider.remove(user.getId());
         return success();
     }
 
@@ -414,7 +427,7 @@ public class CommandParser {
             return fail("Fight with this id does not exists!");
         }
 
-        fightProvider.delete(fight.getId());
+        fightProvider.remove(fight.getId());
         return success();
     }
 }

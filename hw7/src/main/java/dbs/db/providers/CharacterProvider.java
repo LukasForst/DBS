@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * CharacterProvider provides access and view to the Character entity.
+ * <p>
+ * All functions will cause immediate query to the database.
+ */
 public class CharacterProvider extends AbstractProvider {
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -18,6 +23,9 @@ public class CharacterProvider extends AbstractProvider {
         super(entityManager);
     }
 
+    /**
+     * Retrieves all characters from database.
+     */
     public Collection<Character> getAll() {
         TypedQuery<Character> charactersTq = entityManager.createQuery(
                 "SELECT c FROM Character AS c",
@@ -26,10 +34,16 @@ public class CharacterProvider extends AbstractProvider {
         return charactersTq.getResultList();
     }
 
+    /**
+     * Gets character according to given id.
+     */
     public Character get(long characterId) {
         return entityManager.find(Character.class, characterId);
     }
 
+    /**
+     * Gets character according to given character name.
+     */
     public Character get(String name) {
         TypedQuery<Character> charactersTq = entityManager.createQuery(
                 "SELECT c FROM Character AS c WHERE c.name = \"" + name + "\"",
@@ -40,7 +54,10 @@ public class CharacterProvider extends AbstractProvider {
         return characters.size() == 0 ? null : characters.get(0);
     }
 
-    public boolean delete(long characterId) {
+    /**
+     * Removes character from database
+     */
+    public boolean remove(long characterId) {
         Character character = get(characterId);
         if (character == null) {
             logger.log(Level.SEVERE, "Character with id: " + characterId + " could not be found.");
@@ -54,6 +71,9 @@ public class CharacterProvider extends AbstractProvider {
         return true;
     }
 
+    /**
+     * Adds new character to database.
+     */
     public Character addNew(long userId, String name) {
         User user = entityManager.find(User.class, userId);
         if (user == null) {
@@ -72,6 +92,9 @@ public class CharacterProvider extends AbstractProvider {
         return character;
     }
 
+    /**
+     * Changes name of existing character.
+     */
     public Character changeName(long characterId, String newName) {
         Character character = get(characterId);
         if (character == null) {

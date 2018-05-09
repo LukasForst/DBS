@@ -15,12 +15,14 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
+        //creates connection to the database
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("DBSApp");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         initGui(entityManagerFactory, entityManager);
     }
 
+    //initialize gui and all necessary providers
     private static void initGui(final EntityManagerFactory entityManagerFactory, final EntityManager entityManager) {
         UserProvider userProvider = new UserProvider(entityManager);
         CharacterProvider characterProvider = new CharacterProvider(entityManager);

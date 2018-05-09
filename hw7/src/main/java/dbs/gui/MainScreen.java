@@ -16,6 +16,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
+/**
+ * Main screen for GUI using swing.
+ */
 public class MainScreen extends JFrame {
     private JPanel panel1;
     private JTextArea commandResponse;
@@ -44,12 +47,12 @@ public class MainScreen extends JFrame {
         reloadAll();
     }
 
+    //set up listeners for actions in GUI
     private void setUpListeners() {
         commandField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                //enter
-                if (e.getKeyCode() == 10) {
+                if (e.getKeyCode() == 10) { //enter
                     commandResponse.append(commandField.getText() + "\n");
                     evaluateCommand(commandField.getText());
                     commandField.setText("");
@@ -59,7 +62,15 @@ public class MainScreen extends JFrame {
         });
     }
 
+    //evaluates whenever enter was hit
     private void evaluateCommand(String commands) {
+        if (commands.equals("reload")) {
+            reloadAll();
+            return;
+        } else if (commands.equals("?")) {
+            showHelp();
+        }
+
         Pair<Boolean, String> result = commandParser.evaluateCommands(commands);
         if (!result.getFirst()) {
             commandResponse.append("\n!!!!!!---------!!!!!!\n" + result.getSecond() + "\n!!!!!!---------!!!!!!\n");
@@ -68,6 +79,12 @@ public class MainScreen extends JFrame {
         }
     }
 
+    //shows simple help for this app
+    private void showHelp() {
+
+    }
+
+    //query database and display most recent data that are stored here
     private void reloadAll() {
         Collection<User> users = userProvider.getAll();
         Collection<Fight> fights = fightProvider.getAll();
@@ -78,17 +95,20 @@ public class MainScreen extends JFrame {
         reloadCharacterTable(characters, users);
     }
 
+    //reload user table with givene data
     private void reloadUserTable(Collection<User> users) {
         userTable.removeAll();
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Id");
         model.addColumn("UserName");
+        model.addColumn("Password");
         for (User user : users) {
-            model.addRow(new Object[]{user.getId(), user.getUsername()});
+            model.addRow(new Object[]{user.getId(), user.getUsername(), user.getPassword()});
         }
         userTable.setModel(model);
     }
 
+    //reload character table with given data
     private void reloadCharacterTable(Collection<Character> characters, Collection<User> users) {
         characterTable.removeAll();
         DefaultTableModel model = new DefaultTableModel();
@@ -115,6 +135,7 @@ public class MainScreen extends JFrame {
         characterTable.setModel(model);
     }
 
+    //reload fight table with given data
     private void reloadFightTable(Collection<Fight> fights) {
         fightTable.removeAll();
         DefaultTableModel model = new DefaultTableModel();
@@ -138,6 +159,7 @@ public class MainScreen extends JFrame {
         fightTable.setModel(model);
     }
 
+    //change date to string
     private String dateToString(Date date) {
         return "" + date.getDate() + "/" + date.getMonth() + "/" + date.getYear();
     }

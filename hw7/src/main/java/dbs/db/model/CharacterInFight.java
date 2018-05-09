@@ -2,6 +2,9 @@ package dbs.db.model;
 
 import javax.persistence.*;
 
+/**
+ * POJO class for character_in_fight db table
+ * */
 @Entity
 @Table(name = "character_in_fight")
 @IdClass(CompositeKeyCharacterInFight.class)

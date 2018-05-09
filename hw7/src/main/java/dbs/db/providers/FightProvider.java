@@ -13,6 +13,11 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * FightProvider provides access and view to the Fight entity.
+ * <p>
+ * Note that all functions will cause immediate query to the database.
+ */
 public class FightProvider extends AbstractProvider {
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -20,6 +25,9 @@ public class FightProvider extends AbstractProvider {
         super(entityManager);
     }
 
+    /**
+     * Gets all records from database.
+     */
     public Collection<Fight> getAll() {
         TypedQuery<Fight> fights = entityManager.createQuery(
                 "SELECT f FROM Fight AS f",
@@ -28,14 +36,23 @@ public class FightProvider extends AbstractProvider {
         return fights.getResultList();
     }
 
+    /**
+     * Returns fight with given id or null when this fight does not exists.
+     */
     public Fight get(long fightId) {
         return entityManager.find(Fight.class, fightId);
     }
 
+    /**
+     * Adds new Fight to db.
+     */
     public Fight addNew(String place, Date date) {
         return addNew(place, date, new LinkedList<>());
     }
 
+    /**
+     * Adds new Fight to db.
+     */
     public Fight addNew(String place, Date date, Collection<Long> charactersInFight) {
         final Fight fight = new Fight();
         fight.setPlace(place);
@@ -57,7 +74,10 @@ public class FightProvider extends AbstractProvider {
         return fight;
     }
 
-    public boolean delete(long fightId) {
+    /**
+     * Removes fight from database.
+     */
+    public boolean remove(long fightId) {
         final Fight fight = get(fightId);
         if (fight == null) {
             logger.log(Level.SEVERE, "Fight with id: " + fightId + " could not be found.");
@@ -71,6 +91,9 @@ public class FightProvider extends AbstractProvider {
         return true;
     }
 
+    /**
+     * Add character to one fight.
+     */
     public Fight addCharacterToFight(long fightId, long characterId) {
         final Fight fight = get(fightId);
         final Character character = entityManager.find(Character.class, characterId);
@@ -89,6 +112,9 @@ public class FightProvider extends AbstractProvider {
         return fight;
     }
 
+    /**
+     * Removes character from fight.
+     */
     public boolean removeCharacterFromFight(long fightId, long characterId) {
         final Fight fight = get(fightId);
         final Character character = entityManager.find(Character.class, characterId);

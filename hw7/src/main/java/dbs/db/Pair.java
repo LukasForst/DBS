@@ -1,5 +1,8 @@
 package dbs.db;
 
+/**
+ * Simple pair holder.
+ * */
 public class Pair<T, V> {
     private final T first;
     private final V second;

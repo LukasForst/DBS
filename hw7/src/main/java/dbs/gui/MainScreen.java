@@ -34,7 +34,7 @@ public class MainScreen extends JFrame {
     private final CommandParser commandParser;
 
     public MainScreen(CharacterProvider characterProvider, FightProvider fightProvider, UserProvider userProvider, CommandParser commandParser) throws HeadlessException {
-        super("MainScreen");
+        super("Lukas Forst's epic DB app");
         super.setContentPane(panel1);
         super.pack();
 
@@ -43,12 +43,18 @@ public class MainScreen extends JFrame {
         this.userProvider = userProvider;
         this.commandParser = commandParser;
 
-        setUpListeners();
+        setUpElements();
         reloadAll();
     }
 
     //set up listeners for actions in GUI
-    private void setUpListeners() {
+    private void setUpElements() {
+        userTable.setDefaultEditor(Object.class, null); //make all cells non-editable
+        characterTable.setDefaultEditor(Object.class, null);
+        fightTable.setDefaultEditor(Object.class, null);
+
+        commandResponse.append("For help type ? and then press Enter.\n");
+
         commandField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -64,11 +70,12 @@ public class MainScreen extends JFrame {
 
     //evaluates whenever enter was hit
     private void evaluateCommand(String commands) {
-        if (commands.equals("reload")) {
+        if (commands.equals("reload")) { //just reload all data
             reloadAll();
             return;
         } else if (commands.equals("?")) {
             showHelp();
+            return;
         }
 
         Pair<Boolean, String> result = commandParser.evaluateCommands(commands);
@@ -81,7 +88,9 @@ public class MainScreen extends JFrame {
 
     //shows simple help for this app
     private void showHelp() {
-
+        HelpDialog dialog = new HelpDialog();
+        dialog.pack();
+        dialog.setVisible(true);
     }
 
     //query database and display most recent data that are stored here

@@ -52,7 +52,7 @@ public class CommandParser {
     private Pair<Boolean, String> evalSafe(String commands) {
         //try to perform query
         try {
-            String[] data = commands.split(" ");
+            String[] data = commands.split("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
             if (data.length < 2) return fail("Wrong arguments!");
             String command = data[0].toLowerCase().trim();
             String entity = data[1].toLowerCase().trim();
@@ -281,14 +281,14 @@ public class CommandParser {
                         .replace("[", "")
                         .replace("]", "")
                         .split(",");
-                addNames.addAll(Arrays.asList(strIds));
+                Arrays.stream(strIds).forEach(x -> addNames.add(x.trim()));
             } else if (cmp.equals("removeNames") || cmp.equals("rn")) {
                 String[] strIds = data[i + 1]
                         .replace("\"", "")
                         .replace("[", "")
                         .replace("]", "")
                         .split(",");
-                removeNames.addAll(Arrays.asList(strIds));
+                Arrays.stream(strIds).forEach(x -> removeNames.add(x.trim()));
             } else if (cmp.equals("id") || cmp.equals("i")) {
                 id = Long.parseLong(data[i + 1].replace("\"", ""));
             }
